@@ -1,0 +1,7 @@
+sensor_msgs/Image depth_image
+ConeDetection[] detections
+---
+geometry_msgs/Point waypoint
+float32 distance
+PixelPoint[] points
+bool success

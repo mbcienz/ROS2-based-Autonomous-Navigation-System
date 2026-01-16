@@ -1,0 +1,2 @@
+-19.5,0.0,TurtleBot4Directions.NORTH
+11.8,-9.81,TurtleBot4Directions.NORTH

@@ -1,0 +1,6 @@
+# Request - quello che il client invia al service
+sensor_msgs/Image rgb_image
+---
+# Response - quello che il service ritorna al client
+bool success
+ConeDetection[] detections

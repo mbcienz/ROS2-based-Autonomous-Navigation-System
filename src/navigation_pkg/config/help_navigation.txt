@@ -1,0 +1,90 @@
+============================
+NAV2 - SPIEGAZIONE COMPONENTI
+============================
+
+1. bt_navigator – Il cervello della navigazione
+------------------------------------------------
+Coordina l'intero processo di navigazione usando un Behavior Tree (BT).
+Decide passo dopo passo cosa fare: pianificare, seguire percorso, recuperare errori.
+Plugin comuni:
+- navigate_to_pose_bt_node: naviga verso un punto
+- is_stuck_condition_bt_node: controlla se il robot è bloccato
+- clear_costmap_service_bt_node: pulisce la mappa da falsi ostacoli
+
+
+2. controller_server – Il pilota automatico
+-------------------------------------------
+Traduce il percorso in comandi reali per muovere il robot (cmd_vel).
+Utilizza DWB (Dynamic Window Approach) per scegliere la traiettoria migliore.
+Tiene conto di:
+- Ostacoli
+- Vicinanza al goal
+- Dinamica del robot (velocità, accelerazioni)
+- Stato del goal
+
+
+3. planner_server – Il cartografo
+---------------------------------
+Pianifica il percorso globale dalla posizione attuale alla destinazione.
+Usa plugin come NavfnPlanner (basato su Dijkstra).
+Utilizza la mappa globale (global_costmap).
+
+
+4. smoother_server – Il rifinitore
+----------------------------------
+Rende il percorso pianificato più fluido e facile da seguire.
+Rimuove angoli acuti e oscillazioni inutili.
+
+
+5. local_costmap / global_costmap – Le mappe dei pericoli
+----------------------------------------------------------
+- local_costmap: mappa dinamica aggiornata in tempo reale dai sensori.
+- global_costmap: mappa statica globale.
+Layer:
+- static_layer: mappa base
+- obstacle_layer / voxel_layer: ostacoli in tempo reale
+- inflation_layer: margine di sicurezza attorno agli ostacoli
+
+
+6. behavior_server – I comportamenti speciali
+---------------------------------------------
+Gestisce comportamenti utili o di recupero:
+- Spin: rotazione
+- BackUp: retromarcia
+- Wait: attesa
+- DriveOnHeading: guida dritta
+- AssistedTeleop: guida manuale assistita
+
+
+7. velocity_smoother – Il regolatore di velocità
+------------------------------------------------
+Smussa i comandi cmd_vel per movimenti più dolci e sicuri.
+
+
+8. waypoint_follower – Il navigatore per tappe
+----------------------------------------------
+Permette di seguire una serie di waypoint.
+Plugin "wait_at_waypoint" fa fermare il robot a ogni punto per un certo tempo.
+
+
+9. robot_state_publisher
+------------------------
+Pubblica le trasformazioni tra i frame del robot (es. base_link, odom, map).
+Fondamentale per la localizzazione e la navigazione.
+
+--------------------------------------------------
+RIASSUNTO:
+--------------------------------------------------
+| Componente               | Ruolo                                                    |
+|--------------------------|----------------------------------------------------------|
+| bt_navigator             | Decide cosa fare e in che ordine (comportamenti BT)      |
+| controller_server        | Converte i percorsi in comandi cmd_vel                   |
+| planner_server           | Pianifica il percorso globale                            |
+| smoother_server          | Rende il percorso più fluido                             |
+| local_costmap            | Mappa locale dinamica (ostacoli vicini)                  |
+| global_costmap           | Mappa globale statica                                    |
+| behavior_server          | Azioni speciali (spin, backup, wait, ecc.)               |
+| velocity_smoother        | Smussa i comandi di velocità                             |
+| waypoint_follower        | Segue una sequenza di waypoint                           |
+| robot_state_publisher    | Pubblica le trasformazioni dei frame                     |
+"""
